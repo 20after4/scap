@@ -19,7 +19,7 @@ RUN mkdir -p /srv/workspace
 WORKDIR /srv/workspace
 
 # Base Python image
-ENV PYTHON python2.7
+ENV PYTHON python3.4
 
 RUN apt-get update && \
     apt-get -y --no-install-recommends install \
@@ -57,6 +57,6 @@ RUN $PYTHON -m pip install -U -r /tmp/deps/docs/requirements.txt
 RUN rm -rf /tmp/deps
 
 ENV LANG C.UTF-8
-ENV TOXENV py27,flake8,doc
+ENV TOXENV py34,flake8,doc
 COPY . .
 ENTRYPOINT $PYTHON -m tox

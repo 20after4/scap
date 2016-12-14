@@ -32,7 +32,7 @@ class AbstractSync(cli.Application):
     @cli.argument('message', nargs='*', help='Log message for SAL')
     def main(self, *extra_args):
         """Perform a sync operation to the cluster."""
-        print utils.logo()
+        print(utils.logo())
         self._assert_auth_sock()
 
         self.include = None
@@ -276,7 +276,7 @@ class MWVersionsInUse(cli.Application):
         else:
             output = [str(version) for version in versions.keys()]
 
-        print ' '.join(output)
+        print(' '.join(output))
         return 0
 
 
@@ -371,13 +371,13 @@ class Scap(AbstractSync):
         # Update list of extension message files and regenerate the
         # localisation cache.
         with log.Timer('l10n-update', self.get_stats()):
-            for version, wikidb in self.active_wikiversions().items():
+            for version, wikidb in list(self.active_wikiversions().items()):
                 tasks.update_localization_cache(
                     version, wikidb, self.verbose, self.config)
 
         # Compute git version information
         with log.Timer('cache_git_info', self.get_stats()):
-            for version, wikidb in self.active_wikiversions().items():
+            for version, wikidb in list(self.active_wikiversions().items()):
                 tasks.cache_git_info(version, self.config)
 
     def _after_cluster_sync(self):
@@ -641,7 +641,7 @@ class SyncWikiversions(AbstractSync):
         # check for the presence of ExtensionMessages and l10n cache
         # for every branch of mediawiki that is referenced in wikiversions.json
         # to avoid syncing a branch that is lacking these critical files.
-        for version, wikidb in self.active_wikiversions().items():
+        for version, wikidb in list(self.active_wikiversions().items()):
             ext_msg = os.path.join(
                 self.config['stage_dir'],
                 'wmf-config', 'ExtensionMessages-%s.php' % version)
@@ -676,7 +676,7 @@ class UpdateL10n(cli.Application):
     """Update localization files."""
 
     def main(self, *extra_args):
-        for version, wikidb in self.active_wikiversions().items():
+        for version, wikidb in list(self.active_wikiversions().items()):
             tasks.update_localization_cache(
                 version, wikidb, self.verbose, self.config)
 

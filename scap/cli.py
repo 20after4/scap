@@ -372,7 +372,7 @@ def all_commands():
 
     scap.plugins.load_plugins()
 
-    for key in command_registry.keys():
+    for key in list(command_registry.keys()):
         if key in builtin_commands:
             logger = logging.getLogger()
             msg = 'Plugin (%s) attempted to overwrite builtin command: %s' % (

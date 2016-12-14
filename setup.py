@@ -17,7 +17,8 @@ authors = [('Antoine Musso', 'hashar@free.fr'),
 # https://python-packaging-user-guide.readthedocs.io/en/latest/single_source_version/
 base_dir = os.path.dirname(__file__)
 version = {}
-execfile(os.path.join(base_dir, 'scap', 'version.py'), version)
+exec(compile(open(os.path.join(base_dir, 'scap', 'version.py')).read(),
+     os.path.join(base_dir, 'scap', 'version.py'), 'exec'), version)
 
 setup(name='Scap',
       version=version['__version__'],
@@ -34,5 +35,5 @@ setup(name='Scap',
       requires=[line.strip() for line in open('requirements.txt')],
       classifiers=['Operating System :: POSIX :: Linux',
                    'Programming Language :: Python',
-                   'Programming Language :: Python :: 2',
-                   'Programming Language :: Python :: 2.7'])
+                   'Programming Language :: Python :: 3',
+                   'Programming Language :: Python :: 3.4'])

@@ -179,7 +179,7 @@ class ScapArgParser(argparse.ArgumentParser):
         if int in types:
             if re.match(r'\d*$', words[-1]):
                 valid_words.update(['%s%d' % (words[-1], j)
-                                    for j in xrange(10)])
+                                    for j in range(10)])
 
         for word in words:
             valid_words.discard(word.strip())
@@ -227,7 +227,7 @@ def build_parser():
 
     cmds = scap.cli.all_commands()
 
-    for cmd in sorted(cmds.values(), key=lambda x: x['name']):
+    for cmd in sorted(list(cmds.values()), key=lambda x: x['name']):
         build_subparser(cmd, subparsers, global_parser)
 
     return parser

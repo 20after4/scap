@@ -22,7 +22,7 @@ from itertools import chain
 
 
 def py_djb_hash(s):
-    u"""
+    """
     Return the value of DJB's hash function for the given 8-bit string.
 
     >>> py_djb_hash('')
@@ -71,7 +71,7 @@ class Reader(object):
         self.data = data
         self.hashfn = hashfn
 
-        self.index = [read_2_le4(data[i:i + 8]) for i in xrange(0, 2048, 8)]
+        self.index = [read_2_le4(data[i:i + 8]) for i in range(0, 2048, 8)]
         self.table_start = min(p[0] for p in self.index)
         # Assume load load factor is 0.5 like official CDB.
         self.length = sum(p[1] >> 1 for p in self.index)
@@ -93,24 +93,24 @@ class Reader(object):
 
     def items(self):
         """Like dict.items()."""
-        return list(self.iteritems())
+        return list(self.items())
 
     def iterkeys(self):
         """Like dict.iterkeys()."""
-        return (p[0] for p in self.iteritems())
+        return (p[0] for p in self.items())
     __iter__ = iterkeys
 
     def itervalues(self):
         """Like dict.itervalues()."""
-        return (p[1] for p in self.iteritems())
+        return (p[1] for p in self.items())
 
     def keys(self):
         """Like dict.keys()."""
-        return [p[0] for p in self.iteritems()]
+        return [p[0] for p in self.items()]
 
     def values(self):
         """Like dict.values()."""
-        return [p[1] for p in self.iteritems()]
+        return [p[1] for p in self.items()]
 
     def __getitem__(self, key):
         """Like dict.__getitem__()."""
@@ -138,8 +138,8 @@ class Reader(object):
             end = start + (nslots << 3)
             slot_off = start + (((h >> 8) % nslots) << 3)
 
-            for pos in chain(xrange(slot_off, end, 8),
-                             xrange(start, slot_off, 8)):
+            for pos in chain(range(slot_off, end, 8),
+                             range(start, slot_off, 8)):
                 rec_h, rec_pos = read_2_le4(self.data[pos:pos + 8])
 
                 if not rec_h:
@@ -155,7 +155,7 @@ class Reader(object):
     def get(self, key, default=None):
         """Get the first value for key, returning default if missing."""
         # Avoid exception catch when handling default case; much faster.
-        return chain(self.gets(key), (default,)).next()
+        return next(chain(self.gets(key), (default,)))
 
     def getint(self, key, default=None, base=0):
         """Get the first value for key converted it to an int.
@@ -204,7 +204,7 @@ class Writer(object):
         self.hashfn = hashfn
 
         fp.write('\x00' * 2048)
-        self._unordered = [[] for i in xrange(256)]
+        self._unordered = [[] for i in range(256)]
 
     def put(self, key, value=''):
         """Write a string key/value pair to the output file."""
@@ -240,12 +240,12 @@ class Writer(object):
     def putstring(self, key, value, encoding='utf-8'):
         """Write a unicode string associated with the given key to the output
         file after encoding it as UTF-8 or the given encoding."""
-        self.put(key, unicode.encode(value, encoding))
+        self.put(key, str.encode(value, encoding))
 
     def putstrings(self, key, values, encoding='utf-8'):
         """Write zero or more unicode strings to the output file. Equivalent to
         calling putstring() in a loop."""
-        self.puts(key, (unicode.encode(value, encoding) for value in values))
+        self.puts(key, (str.encode(value, encoding) for value in values))
 
     def finalize(self):
         """Write the final hash tables to the output file, and write out its
@@ -256,7 +256,7 @@ class Writer(object):
             ordered = [(0, 0)] * length
             for pair in tbl:
                 where = (pair[0] >> 8) % length
-                for i in chain(xrange(where, length), xrange(0, where)):
+                for i in chain(range(where, length), range(0, where)):
                     if not ordered[i][0]:
                         ordered[i] = pair
                         break

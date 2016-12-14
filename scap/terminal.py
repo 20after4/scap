@@ -152,7 +152,8 @@ SOFTWARE.
 
         try:
             stream_fd = (out.fileno() if hasattr(out, 'fileno') and
-                         callable(out.fileno) else None)
+                         callable(out.fileno)
+                         else None)
         except io.UnsupportedOperation:
             stream_fd = None
 
@@ -174,7 +175,7 @@ SOFTWARE.
 
     def write(self, *args):
         for i in args:
-            if not isinstance(i, basestring):
+            if not isinstance(i, str):
                 i = str(i)
             self._out.write(i)
 

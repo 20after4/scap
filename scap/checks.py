@@ -111,14 +111,14 @@ def execute(checks, logger, concurrency=2):
                     done.append(job)
 
             # Enforce timeout on running jobs
-            for job in doing.values():
+            for job in list(doing.values()):
                 if job.timedout():
                     msg = "Check '{}' exceeded {}s timeout"
                     msg = msg.format(job.check.name, job.check.timeout)
                     handle_failure(job, msg)
 
     finally:
-        for job in doing.values():
+        for job in list(doing.values()):
             msg = "Error running check '{}'".format(job.check.name)
             handle_failure(job, msg)
 
@@ -136,7 +136,7 @@ def load(cfg):
 
     checks = collections.OrderedDict()
     if cfg and cfg.get('checks', None):
-        for name, options in cfg['checks'].iteritems():
+        for name, options in cfg['checks'].items():
             check_type = options.get('type', 'command')
 
             if not options:

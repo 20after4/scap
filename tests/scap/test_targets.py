@@ -45,8 +45,8 @@ class TargetsTest(unittest.TestCase):
         deploy_groups = target_obj.groups
 
         # Without a group in the config, the only group should be "default"
-        self.assertEqual(1, len(deploy_groups.keys()))
-        self.assertEqual('default', deploy_groups.keys()[0])
+        self.assertEqual(1, len(list(deploy_groups.keys())))
+        self.assertEqual('default', list(deploy_groups.keys())[0])
 
     def test_dsh_target_other_groups(self):
         dsh_file = 'test-targets'
@@ -63,8 +63,8 @@ class TargetsTest(unittest.TestCase):
 
         # Since server_groups is set, there should be 2 groups:
         # canary and default
-        self.assertEqual(2, len(deploy_groups.keys()))
-        self.assertEqual('canary', deploy_groups.keys()[0])
+        self.assertEqual(2, len(list(deploy_groups.keys())))
+        self.assertEqual('canary', list(deploy_groups.keys())[0])
 
     def test_dsh_global_group_size(self):
         dsh_file = 'test-targets'
@@ -80,9 +80,9 @@ class TargetsTest(unittest.TestCase):
         target_obj = targets.get(dsh_file, cfg, extra_paths=[dsh_path])
         deploy_groups = target_obj.groups
 
-        self.assertEqual(4, len(deploy_groups.keys()))
+        self.assertEqual(4, len(list(deploy_groups.keys())))
         self.assertEqual(['canary1', 'canary2', 'default1', 'default2'],
-                         deploy_groups.keys())
+                         list(deploy_groups.keys()))
 
     def test_dsh_target_group_size(self):
         dsh_file = 'test-targets'
@@ -100,9 +100,9 @@ class TargetsTest(unittest.TestCase):
 
         # The canary group, containing 3 hosts in this case, should have been
         # split into 2 distinct groups according to the group_size of 2
-        self.assertEqual(3, len(deploy_groups.keys()))
+        self.assertEqual(3, len(list(deploy_groups.keys())))
         self.assertEqual(['canary1', 'canary2', 'default'],
-                         deploy_groups.keys())
+                         list(deploy_groups.keys()))
         self.assertEqual(2, len(deploy_groups['canary1']))
         self.assertEqual(1, len(deploy_groups['canary2']))
         self.assertEqual(0, len(set(deploy_groups['canary1']) &
@@ -124,8 +124,8 @@ class TargetsTest(unittest.TestCase):
 
         # The group_size is ignored when greater than the total number of
         # hosts in the group
-        self.assertEqual(2, len(deploy_groups.keys()))
-        self.assertEqual('canary', deploy_groups.keys()[0])
+        self.assertEqual(2, len(list(deploy_groups.keys())))
+        self.assertEqual('canary', list(deploy_groups.keys())[0])
         self.assertEqual(3, len(deploy_groups['canary']))
 
     def test_limit_target_hosts(self):

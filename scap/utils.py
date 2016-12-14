@@ -107,7 +107,7 @@ def ask(question, default, choices=None):
     if choices is None:
         choices = '[{}]'.format(default)
 
-    ans = raw_input('{} {}: '.format(question, choices)).strip()
+    ans = input('{} {}: '.format(question, choices)).strip()
     return ans.lower() if ans else default
 
 
@@ -148,7 +148,7 @@ def confirm(question='Continue?', default=False, on_fulfilled=None,
     result = default
 
     if sys.stdout.isatty():
-        ans = raw_input('{} {}: '.format(question, choices)).strip().lower()
+        ans = input('{} {}: '.format(question, choices)).strip().lower()
         if ans in yes:
             result = True
         elif ans in no:
@@ -197,7 +197,7 @@ def find_nearest_host(hosts, port=22, timeout=1):
     for ttl in range(1, 30):
         if not host_map:
             break
-        for host, info in random.sample(host_map.items(), len(host_map)):
+        for host, info in random.sample(list(host_map.items()), len(host_map)):
             family, type, proto, _, addr = info
             s = socket.socket(family, type, proto)
             s.setsockopt(
@@ -659,7 +659,7 @@ def logo(eyes=None, color=True, **colors):
     pallet.update(colors)
 
     if not color:
-        for key in pallet.keys():
+        for key in list(pallet.keys()):
             pallet[key] = ''
 
     return ''.join(line % pallet for line in [
@@ -793,7 +793,7 @@ def get_active_wikiversions(directory, realm, datacenter):
         wikiversions = json.load(f)
 
     versions = {}
-    for wikidb, version in wikiversions.items():
+    for wikidb, version in list(wikiversions.items()):
         version = version[4:]  # trim 'php-' from version
         if version not in versions:
             versions[version] = wikidb
@@ -801,7 +801,7 @@ def get_active_wikiversions(directory, realm, datacenter):
     # Convert to list of (version, db) tuples sorted by version number
     # and then convert that list to an OrderedDict
     sorted_versions = collections.OrderedDict(
-        sorted(versions.iteritems(),
+        sorted(iter(versions.items()),
                key=lambda v: distutils.version.LooseVersion(v[0])))
 
     return sorted_versions

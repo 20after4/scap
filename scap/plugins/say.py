@@ -5,7 +5,7 @@
 
     Infinitely superior to cowsay.
 """
-from __future__ import print_function
+
 
 import argparse
 import os
@@ -74,7 +74,7 @@ class Say(cli.Application):
 
     @cli.argument('-W', '--width', type=int,
                   help='Column width for message box')
-    @cli.argument('-e', '--eyes', type=lambda s: unicode(s, 'utf8'),
+    @cli.argument('-e', '--eyes', type=lambda s: str(s, 'utf8'),
                   help='Eyes')
     @cli.argument('propaganda', nargs='*', help='Message to print')
     def main(self, *extra_args):

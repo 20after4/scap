@@ -377,9 +377,8 @@ class DeployLocal(cli.Application):
             nrpe.register(nrpe.load_directory(self.config['nrpe_dir']))
 
         chks = checks.load(self.config)
-        chks = [
-            chk for chk in chks.values() if self._valid_chk(chk, stage, group)
-        ]
+        chks = [chk for chk in list(chks.values()) if
+                self._valid_chk(chk, stage, group)]
 
         success, done = checks.execute(chks, logger=logger)
         failed = [job.check.name for job in done if job.isfailure()]
@@ -569,7 +568,7 @@ class Deploy(cli.Application):
         logger = self.get_logger()
         continue_all = False
 
-        for group, targets in self.deploy_groups.iteritems():
+        for group, targets in self.deploy_groups.items():
             if not len(targets):
                 continue
 
@@ -671,7 +670,7 @@ class Deploy(cli.Application):
                 checks = utils.ordered_load(f, yaml.SafeLoader)['checks']
                 checks_dict.update(checks)
 
-        if len(checks_dict.keys()) == 0:
+        if len(list(checks_dict.keys())) == 0:
             self.deploy_info['perform_checks'] = False
             return
 
@@ -827,7 +826,7 @@ class DeployLog(cli.Application):
                 try:
                     record = log.JSONFormatter.make_record(line)
                     if filter.filter(record):
-                        print formatter.format(record)
+                        print(formatter.format(record))
                 except (ValueError, TypeError):
                     pass
             else:
@@ -842,7 +841,7 @@ class DeployLog(cli.Application):
                     log_path = latest_log_file()
 
                     if log_path and log_path != cur_log_path:
-                        print "-- Opening log file: '{}'".format(log_path)
+                        print("-- Opening log file: '{}'".format(log_path))
                         cur_log_path = log_path
 
                         if cur_log_file:
@@ -886,7 +885,7 @@ class DeployMediaWiki(cli.Application):
             'git_repo': self.config['deploy_dir'],
         }
 
-        option_list = ['-D{}:{}'.format(x, y) for x, y in options.iteritems()]
+        option_list = ['-D{}:{}'.format(x, y) for x, y in options.items()]
         cmd = [scap, 'deploy', '-v']
         cmd += option_list
         cmd += ['--init']

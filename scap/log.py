@@ -476,7 +476,7 @@ class Filter(object):
         """
 
         if hasattr(criteria, 'items'):
-            criteria = criteria.items()
+            criteria = list(criteria.items())
 
         # Normalize all globs into regexs into lambdas
         for attr, criterion in criteria:

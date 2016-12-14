@@ -3,7 +3,7 @@
 import json
 import logging
 import re
-from StringIO import StringIO
+from io import StringIO
 import sys
 from textwrap import dedent
 import unittest

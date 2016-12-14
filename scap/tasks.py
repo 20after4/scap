@@ -169,7 +169,7 @@ def compile_wikiversions(source_tree, cfg, logger=None):
         wikiversions = json.load(f)
 
     # Validate that all versions in the json file exist locally
-    for dbname, version in wikiversions.items():
+    for dbname, version in list(wikiversions.items()):
         version_dir = os.path.join(working_dir, version)
         if not os.path.isdir(version_dir):
             raise IOError(errno.ENOENT, 'Invalid version dir', version_dir)
@@ -181,7 +181,7 @@ def compile_wikiversions(source_tree, cfg, logger=None):
     all_dbs = set(line.strip() for line in open(all_dblist_file))
 
     # Validate that all wikis are in the json file
-    missing_dbs = [db for db in wikiversions.keys() if db not in all_dbs]
+    missing_dbs = [db for db in list(wikiversions.keys()) if db not in all_dbs]
     if missing_dbs:
         raise KeyError('Missing %d expected dbs in %s: %s' % (
             len(missing_dbs), json_file, ', '.join(missing_dbs)))
@@ -210,7 +210,7 @@ def compile_wikiversions(source_tree, cfg, logger=None):
             errno.ENOENT, 'Failed to create php wikiversions', tmp_php_file)
 
     os.rename(tmp_php_file, php_file)
-    os.chmod(php_file, 0664)
+    os.chmod(php_file, 0o664)
     logger.info('Compiled %s to %s', json_file, php_file)
 
 
@@ -246,7 +246,7 @@ def merge_cdb_updates(
     reporter.start()
 
     for i, result in enumerate(pool.imap_unordered(
-        update_l10n_cdb_wrapper, itertools.izip(
+        update_l10n_cdb_wrapper, zip(
             itertools.repeat(cache_dir),
             files,
             itertools.repeat(trust_mtime))), 1):
@@ -458,7 +458,7 @@ def update_l10n_cdb(cache_dir, cdb_file, trust_mtime=False, logger=None):
         tmp_cdb_path = '%s.tmp' % cdb_path
         with open(tmp_cdb_path, 'wb') as fp:
             writer = cdblib.Writer(fp)
-            for key, value in data.items():
+            for key, value in list(data.items()):
                 writer.put(key.encode('utf-8'), value.encode('utf-8'))
             writer.finalize()
             utils.eintr_retry(os.fsync, fp.fileno())
@@ -467,7 +467,7 @@ def update_l10n_cdb(cache_dir, cdb_file, trust_mtime=False, logger=None):
             raise IOError(errno.ENOENT, 'Failed to create CDB', tmp_cdb_path)
 
         # Move temp file over old file
-        os.chmod(tmp_cdb_path, 0664)
+        os.chmod(tmp_cdb_path, 0o664)
         os.rename(tmp_cdb_path, cdb_path)
         # Set timestamp to match upstream json
         os.utime(cdb_path, (json_mtime, json_mtime))
@@ -712,7 +712,7 @@ def refresh_cdb_json_file(file_path):
         reader = cdblib.Reader(fp.read())
 
     out = collections.OrderedDict()
-    for k, v in reader.iteritems():
+    for k, v in reader.items():
         out[k] = v
 
     json_data = json.dumps(out, indent=0, separators=(',', ':'))
@@ -729,7 +729,7 @@ def refresh_cdb_json_file(file_path):
 
     tmp_json.write(json_data)
     tmp_json.close()
-    os.chmod(tmp_json.name, 0644)
+    os.chmod(tmp_json.name, 0o644)
     shutil.move(tmp_json.name, upstream_json)
     logger.debug('Updated: {}'.format(upstream_json))
 
@@ -788,7 +788,7 @@ def check_patch_files(version, cfg):
     version_base = os.path.join(patch_path, version)
 
     ext_dir = os.path.join(version_base, 'extensions')
-    _, extensions, _ = os.walk(ext_dir).next()
+    _, extensions, _ = next(os.walk(ext_dir))
 
     patches = utils.get_patches(['core'], version_base)
     patches.update(utils.get_patches(extensions, ext_dir))
@@ -797,7 +797,7 @@ def check_patch_files(version, cfg):
     version_dir = 'php-{}'.format(version)
     apply_dir = os.path.join(cfg['stage_dir'], version_dir)
 
-    for extension, diffs in patches.iteritems():
+    for extension, diffs in patches.items():
         diff = '\n'.join(diffs)
 
         if extension != 'core':

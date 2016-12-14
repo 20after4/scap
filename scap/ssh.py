@@ -256,5 +256,5 @@ def cluster_ssh(
                     yield host, status, ohandler
     finally:
         poll.close()
-        for pid, (proc, host) in procs.items():
+        for pid, (proc, host) in list(procs.items()):
             proc.kill()

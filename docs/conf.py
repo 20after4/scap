@@ -14,8 +14,8 @@ extensions += ['sphinxcontrib.programoutput']
 templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
-project = u'scap'
-copyright = u'%s, Wikimedia Foundation & contributors' % date.today().year
+project = 'scap'
+copyright = '%s, Wikimedia Foundation & contributors' % date.today().year
 version = '3.0'
 release = version
 exclude_patterns = ['_build']
@@ -33,7 +33,7 @@ man_pages = [
 html_theme = 'nature'
 
 extensions += ['sphinx.ext.intersphinx']
-intersphinx_mapping = {'python': ('https://docs.python.org/2.7', None)}
+intersphinx_mapping = {'python': ('https://docs.python.org/3.4', None)}
 
 # html_static_path = ['_static']
 htmlhelp_basename = 'scapdoc'

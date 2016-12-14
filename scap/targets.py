@@ -69,7 +69,7 @@ def limit_target_hosts(pattern, hosts):
             asc = string.ascii_letters
             seq = asc[asc.index(beg):asc.index(end) + 1]
         except ValueError:  # numeric range
-            seq = range(int(beg), int(end) + 1)
+            seq = list(range(int(beg), int(end) + 1))
 
         patterns = [''.join([head, str(i).zfill(zfill), tail]) for i in seq]
         rpattern = rpattern[rpattern.find(']') + 1:]
@@ -184,7 +184,7 @@ class TargetList():
             if group_size is None or group_size >= len(targets):
                 groups[group] = targets
             else:
-                for i in xrange(0, len(targets), group_size):
+                for i in range(0, len(targets), group_size):
                     group_key = group + str((i / group_size) + 1)
                     groups[group_key] = targets[i:i + group_size]
 

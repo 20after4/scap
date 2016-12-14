@@ -2,7 +2,7 @@
 
 import logging
 import select
-from StringIO import StringIO
+from io import StringIO
 import unittest
 
 from scap import checks

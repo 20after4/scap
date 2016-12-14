@@ -4,7 +4,7 @@ import logging
 import unittest
 
 from scap import ssh
-from StringIO import StringIO
+from io import StringIO
 
 
 class JSONOutputHandlerTest(unittest.TestCase):
