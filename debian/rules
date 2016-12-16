@@ -4,7 +4,7 @@ export PYBUILD_NAME=scap
 PKG_VERSION = $(shell dpkg-parsechangelog --show-field Version)
 
 %:
-	dh $@ --with python2,bash-completion --buildsystem=pybuild
+	dh $@ --with python3,bash-completion --buildsystem=pybuild
 
 override_dh_auto_configure:
 	dh_auto_configure

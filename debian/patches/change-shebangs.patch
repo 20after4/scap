@@ -1,10 +1,10 @@
-Description: Use absolute path to python2 interpreter for bins
+Description: Use absolute path to python3 interpreter for bins
 Author: Wikimedia Release Engineering <releng@wikimedia.org>
 --- b/bin/scap
 +++ a/bin/scap
 @@ -1,4 +1,4 @@
--#!/usr/bin/env python2
-+#!/usr/bin/python2
+-#!/usr/bin/env python3
++#!/usr/bin/python3
  # -*- coding: utf-8 -*-
  #
  # Sync MW source and config to cluster.
