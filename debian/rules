@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 export PYBUILD_NAME=scap
-export PYBUILD_TEST_PYTEST=0
+export DEB_BUILD_OPTIONS=nocheck
 
 PKG_VERSION = $(shell dpkg-parsechangelog --show-field Version)
 
