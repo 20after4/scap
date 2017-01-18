@@ -107,7 +107,8 @@ class Application(object):
                                   ' '.join(extra_args))
 
         if hasattr(args, 'message'):
-            args.message = ' '.join(args.message) or '(no message)'
+            args.message = (' '.join(args.message) or
+                            '(no justification provided)')
 
         return args, extra_args
 
@@ -124,8 +125,6 @@ class Application(object):
 
     def _setup_loggers(self):
         """Setup logging."""
-        term.scroll_region(0, term.height - 3) \
-            .scroll_forward(min((term.height, 4)))
         log.setup_loggers(self.config, self.arguments.loglevel)
 
     def _setup_environ(self):
@@ -195,9 +194,7 @@ class Application(object):
         """
         try:
             term.reset_colors()
-            term.scroll_region(0, term.height)
-            term.move(term.height, 0).clear_eol()
-            term.nl().flush()
+            term.close()
         except Exception:
             pass
 
@@ -252,7 +249,8 @@ class Application(object):
         logging.basicConfig(
             level=logging.INFO,
             format=log.CONSOLE_LOG_FORMAT,
-            datefmt='%H:%M:%S')
+            datefmt='%H:%M:%S',
+            stream=sys.stdout)
 
         # Silence this noisy logger early
         logging.getLogger('urllib3').setLevel(logging.WARNING)
