@@ -280,9 +280,9 @@ class DeployGroup():
         label = self.name
         targets = [host for host in self.targets if host not in self.excludes]
 
-        for i in xrange(0, len(targets), self.size):
+        for i in range(0, len(targets), self.size):
             if len(targets) > self.size:
-                label = self.name + str((i / self.size) + 1)
+                label = self.name + str(int(i / self.size) + 1)
 
             yield label, targets[i:i + self.size]
 

@@ -30,6 +30,8 @@ import logging
 import os
 import re
 
+from io import IOBase
+
 import scap
 import scap.plugins
 
@@ -191,14 +193,12 @@ class ScapArgParser(argparse.ArgumentParser):
             valid_words.add('__versions__')
 
         for t in types:
-            cls = type(t)
-            if t is argparse.FileType or \
-               cls is argparse.FileType or \
-               t is file or cls is file:
+            if isinstance(t, argparse.FileType) or isinstance(t, IOBase):
                 valid_words.add('__files__')
 
         if len(words[-1].strip()) > 0:
             valid_words = {w for w in valid_words if w.startswith(words[-1])}
+
         valid_words.discard('--_completion ')
         valid_words.discard('-')
         return valid_words

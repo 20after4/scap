@@ -245,7 +245,9 @@ class CheckJob(object):
         `checks.execute`.
         """
 
-        self.output += utils.eintr_retry(os.read, self.fd, 1048576)
+        output = utils.eintr_retry(os.read, self.fd, 1048576)
+        self.output += output.decode(encoding="utf-8", errors="strict")
+
         result = utils.eintr_retry(self.proc.poll)
 
         if result is not None:
@@ -269,7 +271,7 @@ class CheckJob(object):
 
         for output in self.proc.communicate():
             if output is not None:
-                self.output += output
+                self.output += output.decode(encoding="utf-8", errors="strict")
 
 
 @checktype('override')

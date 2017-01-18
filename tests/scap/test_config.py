@@ -16,7 +16,7 @@ class ConfigTest(unittest.TestCase):
         cfg_file = tempfile.NamedTemporaryFile(delete=False)
 
         try:
-            cfg_file.write(content)
+            cfg_file.write(content.encode(encoding='utf-8'))
             cfg_file.close()
             yield cfg_file.name
         finally:

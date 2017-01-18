@@ -14,7 +14,7 @@ class TasksTest(unittest.TestCase):
     @unittest.skipIf(sys.platform == 'darwin', 'Requires GNU find')
     def test_check_valid_syntax__invalid_php_file_raise_exception(self):
         with tempfile.NamedTemporaryFile(suffix=".php") as f:
-            f.write('<?php blba')
+            f.write('<?php blba'.encode(encoding='utf-8'))
             f.flush()
             with self.assertRaises(CalledProcessError) as cm:
                 tasks.check_valid_syntax(f.name)
